@@ -8,7 +8,7 @@ export class Mouse {
   private pressTime: number = 0;
 
   public pressLeftButton(currentTimInMilliseconds: number): void {
-
+    this.notifySubscribers(MouseEventType.SingleClick);
   }
 
   public releaseLeftButton(currentTimInMilliseconds: number): void {

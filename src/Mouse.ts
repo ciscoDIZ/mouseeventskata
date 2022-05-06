@@ -28,6 +28,11 @@ export class Mouse {
 
   public move(from: MousePointerCoordinates, to: MousePointerCoordinates,
               currentTimInMilliseconds: number): void {
+    if (from.coordinate.x != to.coordinate.x ||
+      from.coordinate.y != to.coordinate.y) {
+      this.notifySubscribers(MouseEventType.Drag);
+    }
+    this.pressTime = currentTimInMilliseconds;
   }
 
   public subscribe(listener: MouseEventListener): void {

@@ -1,6 +1,7 @@
 import {Mouse} from "../src/Mouse";
 import {MouseEventType} from "../src/MouseEventType";
 import {MouseEventListener} from "../src/MouseEventListener";
+import {MousePointerCoordinates} from "../src/MousePointerCoordinates";
 
 class ListenerMock implements MouseEventListener{
   type?: MouseEventType;
@@ -11,37 +12,45 @@ class ListenerMock implements MouseEventListener{
 
 }
 
+let listenerMock: ListenerMock;
+let mouse: Mouse;
+beforeEach(() => {
+  listenerMock = new ListenerMock();
+  mouse = new Mouse();
+});
+
 describe('Mouse', () => {
   it('should be single click', function () {
-    const mouse = new Mouse();
-    const mouseMock = new ListenerMock();
-    mouse.subscribe(mouseMock);
+    mouse.subscribe(listenerMock);
     mouse.pressLeftButton(new Date().getMilliseconds());
     mouse.releaseLeftButton(new Date().getMilliseconds());
-    expect(mouseMock.type).toEqual(MouseEventType.SingleClick);
+    expect(listenerMock.type).toEqual(MouseEventType.SingleClick);
   });
 
   it('should be double click', function () {
-    const mouse = new Mouse();
-    const mouseMock = new ListenerMock();
-    mouse.subscribe(mouseMock);
+    mouse.subscribe(listenerMock);
     mouse.pressLeftButton(new Date().getMilliseconds());
     mouse.releaseLeftButton(new Date().getMilliseconds());
     mouse.pressLeftButton(new Date().getMilliseconds());
     mouse.releaseLeftButton(new Date().getMilliseconds());
-    expect(mouseMock.type).toEqual(MouseEventType.DoubleClick);
+    expect(listenerMock.type).toEqual(MouseEventType.DoubleClick);
   });
 
   it('should be triple click', function () {
-    const mouse = new Mouse();
-    const mouseMock = new ListenerMock();
-    mouse.subscribe(mouseMock);
+    mouse.subscribe(listenerMock);
     mouse.pressLeftButton(new Date().getMilliseconds());
     mouse.releaseLeftButton(new Date().getMilliseconds());
     mouse.pressLeftButton(new Date().getMilliseconds());
     mouse.releaseLeftButton(new Date().getMilliseconds());
     mouse.pressLeftButton(new Date().getMilliseconds());
     mouse.releaseLeftButton(new Date().getMilliseconds());
-    expect(mouseMock.type).toEqual(MouseEventType.TripleClick);
+    expect(listenerMock.type).toEqual(MouseEventType.TripleClick);
+  });
+
+  it('should be drag', function () {
+    mouse.subscribe(listenerMock);
+    mouse.pressLeftButton(new Date().getMilliseconds());
+    mouse.move(new MousePointerCoordinates(0, 10), new MousePointerCoordinates(0, 20), new Date().getMilliseconds());
+    expect(listenerMock.type).toEqual(MouseEventType.Drag);
   });
 });

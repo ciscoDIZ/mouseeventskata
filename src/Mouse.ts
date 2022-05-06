@@ -13,23 +13,29 @@ export class Mouse {
       this.pressTime < this.timeWindowInMillisecondsForDoubleClick;
     if (this.lastEventType == MouseEventType.DoubleClick && clickInTime) {
       this.notifySubscribers(MouseEventType.TripleClick);
+      this.pressTime = currentTimInMilliseconds;
       return;
     }
     if (this.pressTime && clickInTime) {
       this.notifySubscribers(MouseEventType.DoubleClick);
+      this.pressTime = currentTimInMilliseconds;
       return;
     }
+    this.pressTime = currentTimInMilliseconds;
     this.notifySubscribers(MouseEventType.SingleClick);
   }
 
   public releaseLeftButton(currentTimInMilliseconds: number): void {
     this.pressTime = currentTimInMilliseconds;
+    if (this.lastEventType == MouseEventType.Drag) {
+      this.notifySubscribers(MouseEventType.Drop);
+    }
   }
 
   public move(from: MousePointerCoordinates, to: MousePointerCoordinates,
               currentTimInMilliseconds: number): void {
-    if (from.coordinate.x != to.coordinate.x ||
-      from.coordinate.y != to.coordinate.y) {
+    if (this.pressTime && (from.coordinate.x != to.coordinate.x ||
+      from.coordinate.y != to.coordinate.y)) {
       this.notifySubscribers(MouseEventType.Drag);
     }
     this.pressTime = currentTimInMilliseconds;

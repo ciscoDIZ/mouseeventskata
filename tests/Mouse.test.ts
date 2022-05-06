@@ -53,4 +53,12 @@ describe('Mouse', () => {
     mouse.move(new MousePointerCoordinates(0, 10), new MousePointerCoordinates(0, 20), new Date().getMilliseconds());
     expect(listenerMock.type).toEqual(MouseEventType.Drag);
   });
+
+  it('should be drop', function () {
+    mouse.subscribe(listenerMock);
+    mouse.pressLeftButton(new Date().getMilliseconds());
+    mouse.move(new MousePointerCoordinates(0, 10), new MousePointerCoordinates(0, 20), new Date().getMilliseconds());
+    mouse.releaseLeftButton(new Date().getMilliseconds());
+    expect(listenerMock.type).toEqual(MouseEventType.Drop);
+  });
 });

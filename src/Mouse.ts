@@ -6,10 +6,16 @@ export class Mouse {
   private listeners: MouseEventListener[] = new Array<MouseEventListener>();
   private readonly timeWindowInMillisecondsForDoubleClick: number = 500;
   private pressTime: number = 0;
+  private lastEventType?: MouseEventType;
 
   public pressLeftButton(currentTimInMilliseconds: number): void {
-    if (this.pressTime && currentTimInMilliseconds -
-      this.pressTime < this.timeWindowInMillisecondsForDoubleClick) {
+    const clickInTime = currentTimInMilliseconds -
+      this.pressTime < this.timeWindowInMillisecondsForDoubleClick;
+    if (this.lastEventType == MouseEventType.DoubleClick && clickInTime) {
+      this.notifySubscribers(MouseEventType.TripleClick);
+      return;
+    }
+    if (this.pressTime && clickInTime) {
       this.notifySubscribers(MouseEventType.DoubleClick);
       return;
     }
@@ -29,6 +35,7 @@ export class Mouse {
   }
 
   private notifySubscribers(eventType: MouseEventType): void {
+    this.lastEventType = eventType;
     this.listeners.map(listener => listener.handleMouseEvent(eventType));
   }
 }

@@ -8,11 +8,16 @@ export class Mouse {
   private pressTime: number = 0;
 
   public pressLeftButton(currentTimInMilliseconds: number): void {
+    if (this.pressTime && currentTimInMilliseconds -
+      this.pressTime < this.timeWindowInMillisecondsForDoubleClick) {
+      this.notifySubscribers(MouseEventType.DoubleClick);
+      return;
+    }
     this.notifySubscribers(MouseEventType.SingleClick);
   }
 
   public releaseLeftButton(currentTimInMilliseconds: number): void {
-
+    this.pressTime = currentTimInMilliseconds;
   }
 
   public move(from: MousePointerCoordinates, to: MousePointerCoordinates,

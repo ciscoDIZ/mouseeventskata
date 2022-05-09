@@ -3,12 +3,10 @@ import {MouseEventType} from "../src/MouseEventType";
 import {MouseEventListener} from "../src/MouseEventListener";
 import {MousePointerCoordinates} from "../src/MousePointerCoordinates";
 
-class ListenerMock implements MouseEventListener{
+class ListenerMock {
   type?: MouseEventType;
+  mouseEventListener: MouseEventListener = (type) => this.type = type
 
-  handleMouseEvent(type: MouseEventType): void {
-    this.type = type;
-  }
 
 }
 
@@ -21,14 +19,14 @@ beforeEach(() => {
 
 describe('Mouse', () => {
   it('should be single click', function () {
-    mouse.subscribe(listenerMock);
+    mouse.subscribe(listenerMock.mouseEventListener);
     mouse.pressLeftButton(new Date().getMilliseconds());
     mouse.releaseLeftButton(new Date().getMilliseconds());
     expect(listenerMock.type).toEqual(MouseEventType.SingleClick);
   });
 
   it('should be double click', function () {
-    mouse.subscribe(listenerMock);
+    mouse.subscribe(listenerMock.mouseEventListener);
     mouse.pressLeftButton(new Date().getMilliseconds());
     mouse.releaseLeftButton(new Date().getMilliseconds());
     mouse.pressLeftButton(new Date().getMilliseconds());
@@ -37,7 +35,7 @@ describe('Mouse', () => {
   });
 
   it('should be triple click', function () {
-    mouse.subscribe(listenerMock);
+    mouse.subscribe(listenerMock.mouseEventListener);
     mouse.pressLeftButton(new Date().getMilliseconds());
     mouse.releaseLeftButton(new Date().getMilliseconds());
     mouse.pressLeftButton(new Date().getMilliseconds());
@@ -48,14 +46,14 @@ describe('Mouse', () => {
   });
 
   it('should be drag', function () {
-    mouse.subscribe(listenerMock);
+    mouse.subscribe(listenerMock.mouseEventListener);
     mouse.pressLeftButton(new Date().getMilliseconds());
     mouse.move(new MousePointerCoordinates(0, 10), new MousePointerCoordinates(0, 20), new Date().getMilliseconds());
     expect(listenerMock.type).toEqual(MouseEventType.Drag);
   });
 
   it('should be drop', function () {
-    mouse.subscribe(listenerMock);
+    mouse.subscribe(listenerMock.mouseEventListener);
     mouse.pressLeftButton(new Date().getMilliseconds());
     mouse.move(new MousePointerCoordinates(0, 10), new MousePointerCoordinates(0, 20), new Date().getMilliseconds());
     mouse.releaseLeftButton(new Date().getMilliseconds());

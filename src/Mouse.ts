@@ -47,6 +47,6 @@ export class Mouse {
 
   private notifySubscribers(eventType: MouseEventType): void {
     this.lastEventType = eventType;
-    this.listeners.map(listener => listener.handleMouseEvent(eventType));
+    this.listeners.map(listener => listener(eventType));
   }
 }

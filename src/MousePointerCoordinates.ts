@@ -4,7 +4,6 @@ export class MousePointerCoordinates {
     this._coordinate = {x, y}
   }
 
-
   get coordinate(): Point {
     return this._coordinate;
   }
